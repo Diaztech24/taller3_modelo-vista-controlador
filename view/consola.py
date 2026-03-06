@@ -1,0 +1,12 @@
+def menu():
+  print("")
+  print("===============================================")
+  print("Sistema de cuentas (versión inicial del taller)")
+  print("===============================================")
+  print("1) Crear cuenta")
+  print("2) Listar cuentas")
+  print("3) Depositar")
+  print("4) Retirar")
+  print("5) Buscar por titular")
+  print("0) Salir")
+  print("")
