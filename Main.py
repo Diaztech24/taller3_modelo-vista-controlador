@@ -1,34 +1,3 @@
-# ============================================================
-# ACTIVIDAD – SCRIPT INICIAL (VERSIÓN SIN BUENAS PRÁCTICAS)
-# ============================================================
-# Qué hace este script:
-#
-# Este programa implementa un sistema muy simple de cuentas bancarias
-# en consola. Permite:
-#   1) Crear cuentas (titular + saldo inicial)
-#   2) Consultar el listado de cuentas
-#   3) Depositar dinero
-#   4) Retirar dinero
-#
-# Importante:
-# - Todo está en un solo archivo.
-# - Mezcla lógica, datos y salida por consola.
-# - No sigue estándares de estilo.
-# - No tiene docstrings.
-# - Usa nombres inconsistentes y estructura poco clara.
-#
- 
-# - Formatee el código y corrija problemas de estilo con Ruff
-# - Agregue docstrings (modelo, controlador, vista)
-# - Reestructure el proyecto a MVC:
-#     model/cuenta.py
-#     view/consola.py
-#     controller/cuenta_controller.py
-#     main.py
-#
-# Nota: este archivo debe seguir funcionando antes y después del refactor.
-# ============================================================
-
 import math
 import os
 import sys
