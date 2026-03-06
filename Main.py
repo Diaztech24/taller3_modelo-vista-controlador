@@ -33,45 +33,55 @@ from view.consola import mostrar_menu
 
 
 def main():
+    controller = CuentaController()
+
     while True:
-        menu()
+        mostrar_menu()
         op = input("Seleccione una opción: ").strip()
+
         if op == "1":
             t = input("Titular: ").strip()
             s = input("Saldo inicial: ").strip()
-            CrearCuenta(t, s)
+            controller.crear_cuenta(t, s)
+
         elif op == "2":
-            listarCuentas()
+            controller.listar_cuentas()
+
         elif op == "3":
             try:
                 i = int(input("ID cuenta: ").strip())
-            except:
+            except ValueError:
                 print("Error: ID inválido")
                 continue
+
             m = input("Monto a depositar: ").strip()
-            Depositar(i, m)
+            controller.depositar(i, m)
+
         elif op == "4":
             try:
                 i = int(input("ID cuenta: ").strip())
-            except:
+            except ValueError:
                 print("Error: ID inválido")
                 continue
+
             m = input("Monto a retirar: ").strip()
-            retirar(i, m)
+            controller.retirar(i, m)
+
         elif op == "5":
             n = input("Titular: ").strip()
-            encontrados = buscarCuentaPorTitular(n)
-            if len(encontrados) == 0:
+            encontrados = controller.buscar_por_titular(n)
+
+            if not encontrados:
                 print("No se encontraron cuentas para ese titular.")
             else:
                 print("Cuentas encontradas:")
                 for c in encontrados:
-                    print(
-                        " - ID:", c["id"], "Saldo:", c["saldo"], "Creada:", c["creada"]
-                    )
+                    print(f" - ID: {c.id} Saldo: {c.saldo} Creada: {c.creada}")
+
         elif op == "0":
             print("Finalizando programa.")
             break
+
         else:
             print("Opción inválida.")
 
