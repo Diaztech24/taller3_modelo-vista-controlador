@@ -1,1 +1,159 @@
-print("David es un tralarero")
+# ============================================================
+# ACTIVIDAD – SCRIPT INICIAL (VERSIÓN SIN BUENAS PRÁCTICAS)
+# ============================================================
+# Qué hace este script:
+#
+# Este programa implementa un sistema muy simple de cuentas bancarias
+# en consola. Permite:
+#   1) Crear cuentas (titular + saldo inicial)
+#   2) Consultar el listado de cuentas
+#   3) Depositar dinero
+#   4) Retirar dinero
+#
+# Importante:
+# - Todo está en un solo archivo.
+# - Mezcla lógica, datos y salida por consola.
+# - No sigue estándares de estilo.
+# - No tiene docstrings.
+# - Usa nombres inconsistentes y estructura poco clara.
+#
+ 
+# - Formatee el código y corrija problemas de estilo con Ruff
+# - Agregue docstrings (modelo, controlador, vista)
+# - Reestructure el proyecto a MVC:
+#     model/cuenta.py
+#     view/consola.py
+#     controller/cuenta_controller.py
+#     main.py
+#
+# Nota: este archivo debe seguir funcionando antes y después del refactor.
+# ============================================================
+
+import math
+import os
+import sys
+from datetime import datetime
+
+BD = {}  # "base de datos" en memoria: id -> cuenta (diccionario)
+contador = 1
+
+
+def CrearCuenta(Titular,SaldoInicial=0):
+  global contador
+  if Titular=="":
+    print("Error: el titular no puede estar vacío"); return None
+  try:
+    SaldoInicial=float(SaldoInicial)
+  except:
+    print("Error: saldo inicial inválido"); return None
+  if SaldoInicial<0:
+    print("Error: el saldo inicial no puede ser negativo"); return None
+  c={"id":contador,"titular":Titular,"saldo":SaldoInicial,"creada":str(datetime.now())}
+  BD[contador]=c
+  contador=contador+1
+  print("Cuenta creada. ID:",c["id"],"Titular:",c["titular"],"Saldo:",c["saldo"])
+  return c
+
+
+def listarCuentas():
+  if len(BD)==0:
+    print("No hay cuentas registradas."); return
+  print("Listado de cuentas")
+  for k in BD:
+    c=BD[k]
+    print(" - ID:",c["id"],"Titular:",c["titular"],"Saldo:",c["saldo"])
+
+
+def Depositar(idCuenta,monto):
+  if idCuenta not in BD:
+    print("Error: cuenta no existe"); return False
+  try:
+    monto=float(monto)
+  except:
+    print("Error: monto inválido"); return False
+  if monto<=0:
+    print("Error: el monto debe ser mayor que cero"); return False
+  BD[idCuenta]["saldo"]=BD[idCuenta]["saldo"]+monto
+  print("Depósito realizado. Nuevo saldo:",BD[idCuenta]["saldo"])
+  return True
+
+
+def retirar(idCuenta, monto):
+  if idCuenta not in BD:
+    print("Error: cuenta no existe"); return False
+  try:
+    monto=float(monto)
+  except:
+    print("Error: monto inválido"); return False
+  if monto<=0:
+    print("Error: el monto debe ser mayor que cero"); return False
+  if BD[idCuenta]["saldo"]<monto:
+    print("Error: saldo insuficiente"); return False
+  BD[idCuenta]["saldo"]=BD[idCuenta]["saldo"]-monto
+  print("Retiro realizado. Nuevo saldo:",BD[idCuenta]["saldo"])
+  return True
+
+
+def buscarCuentaPorTitular(nombre):
+  res=[]
+  for k in BD:
+    if BD[k]["titular"].lower()==nombre.lower():
+      res.append(BD[k])
+  return res
+
+
+def menu():
+  print("")
+  print("===============================================")
+  print("Sistema de cuentas (versión inicial del taller)")
+  print("===============================================")
+  print("1) Crear cuenta")
+  print("2) Listar cuentas")
+  print("3) Depositar")
+  print("4) Retirar")
+  print("5) Buscar por titular")
+  print("0) Salir")
+  print("")
+
+
+def main():
+  while True:
+    menu()
+    op=input("Seleccione una opción: ").strip()
+    if op=="1":
+      t=input("Titular: ").strip()
+      s=input("Saldo inicial: ").strip()
+      CrearCuenta(t,s)
+    elif op=="2":
+      listarCuentas()
+    elif op=="3":
+      try:
+        i=int(input("ID cuenta: ").strip())
+      except:
+        print("Error: ID inválido"); continue
+      m=input("Monto a depositar: ").strip()
+      Depositar(i,m)
+    elif op=="4":
+      try:
+        i=int(input("ID cuenta: ").strip())
+      except:
+        print("Error: ID inválido"); continue
+      m=input("Monto a retirar: ").strip()
+      retirar(i,m)
+    elif op=="5":
+      n=input("Titular: ").strip()
+      encontrados=buscarCuentaPorTitular(n)
+      if len(encontrados)==0:
+        print("No se encontraron cuentas para ese titular.")
+      else:
+        print("Cuentas encontradas:")
+        for c in encontrados:
+          print(" - ID:",c["id"],"Saldo:",c["saldo"],"Creada:",c["creada"])
+    elif op=="0":
+      print("Finalizando programa.")
+      break
+    else:
+      print("Opción inválida.")
+
+if __name__=="__main__":
+  main()
